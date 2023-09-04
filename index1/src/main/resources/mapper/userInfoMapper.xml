@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.richlin.security.dao.CustomUserDao">
+    <!--    mapper接口和映射文件要保持两个一致
+        1.mapper接口的全类名和映射文件的namespace一致
+        2.mapper接口中的方法和方法名要和映射文件中的sql的id保持一致
+-->
+    <select id="getInfoByUsername" resultType="top.richlin.security.entity.UserInfo">
+        SELECT
+            u.id,
+            u.email,
+            u.name,
+            u.phone,
+            u.vip_level,
+            u.coin,
+            u.register_time,
+            u.last_login_time,
+            u.invite_code,
+            u.active_status,
+            info.nickname,
+            info.signature,
+            info.gender,
+            info.birthday,
+            info.address,
+            leveinfo.`level`,
+            leveinfo.exp
+        FROM
+            `user` AS u
+                INNER JOIN
+            user_info AS info
+            ON
+                u.id = info.id
+                INNER JOIN
+            user_level_info AS leveinfo
+            ON
+                u.id = leveinfo.id
+        WHERE
+            u.email = #{username}
+        And
+            u.is_delete = 0
+    </select>
+</mapper>

@@ -1,0 +1,33 @@
+
+spring:
+  profiles:
+    active: data-redis-service
+  main:
+    allow-bean-definition-overriding: true
+    allow-circular-references: true
+  datasource:
+    username: root
+    password: woot
+    url: jdbc:mysql://127.0.0.1:3306/mysite?serverTimezone=Asia/Shanghai
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  data:
+    redis:
+      port: 6379
+      password: woot
+      host: localhost
+  session:
+    timeout: 60
+    redis:
+      namespace: "richlin:session"
+  mail:
+    host: smtp.qq.com
+    username: 1754350764@qq.com
+    password: iwycgjkbwpxlbaad
+    default-encoding: UTF-8
+    port: 587
+
+logging:
+  level:
+    top.richlin: Debug
+mybatis-plus:
+  mapper-locations: classpath:/mapper/*.xml

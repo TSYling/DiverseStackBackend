@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.richlin.security.dao.CustomUserDao">
+    <!--    mapper接口和映射文件要保持两个一致
+        1.mapper接口的全类名和映射文件的namespace一致
+        2.mapper接口中的方法和方法名要和映射文件中的sql的id保持一致
+-->
+        <select id="loadByUsername" resultType="top.richlin.security.entity.CustomUser">
+            select * from user where email = #{username} and is_delete = 0
+        </select>
+</mapper>
