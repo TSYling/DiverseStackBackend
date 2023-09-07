@@ -34,6 +34,7 @@ public class ResponseMessageTemplate {
         contextMap.put(key,value);
         return new ResponseMessage(FAIL, contextMap);
     }
+
     public static void sendSubscribeFail(SimpMessagingTemplate template, StompHeaderAccessor accessor,String errorDescribe){
         String errorDescribeToUse = "订阅已被拒绝";
         if(!errorDescribe.equals("")){
@@ -54,4 +55,5 @@ public class ResponseMessageTemplate {
                 "/topic/status",
                 getSuccessResponseMessage("status", successDescribeToUse));
     }
+
 }

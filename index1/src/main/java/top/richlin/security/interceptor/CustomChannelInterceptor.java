@@ -11,6 +11,7 @@ import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.stereotype.Component;
+import top.richlin.security.dao.CustomUserDao;
 import top.richlin.security.entity.*;
 import top.richlin.security.template.ResponseMessageTemplate;
 import top.richlin.security.util.MessageUtils;
@@ -28,14 +29,16 @@ import java.util.List;
 @Component
 public class CustomChannelInterceptor implements ChannelInterceptor {
     private final SimpMessagingTemplate template;
-    private Rooms rooms;
+    private final Rooms rooms;
+    private final StompConnectPool stompConnectPool;
 
 
     @Autowired
     @Lazy
-    public CustomChannelInterceptor(SimpMessagingTemplate template,Rooms rooms) {
+    public CustomChannelInterceptor(SimpMessagingTemplate template, Rooms rooms, StompConnectPool stompConnectPool) {
         this.template = template;
         this.rooms = rooms;
+        this.stompConnectPool = stompConnectPool;
     }
 
     @Override
@@ -122,7 +125,7 @@ public class CustomChannelInterceptor implements ChannelInterceptor {
         //  加入房间
         try{
             String password = MessageUtils.getHeaderString(message, "password");
-            room.join(user,password);
+            rooms.join(user,password,room.getId());
             ResponseMessageTemplate.sendSubscribeSuccess(template,accessor,"");
             return message;
         }catch (Exception e){
@@ -130,4 +133,17 @@ public class CustomChannelInterceptor implements ChannelInterceptor {
             return null;
         }
     }
+
+//    private Message<?> dealWithConnect(Message<?> message, MessageChannel channel, StompHeaderAccessor accessor){
+//        /**
+//         * 获取用户信息在mysql中修改用户在线状态
+//         */
+//        CustomUser user = MessageUtils.getCustomUser(message);
+//        user.setActiveStatus(UserActiveState.ONLINE);
+//        // 更新状态
+////        userDao.updateById(user);
+//        // 记录信息
+//        stompConnectPool.recordOnline(user);
+//        return message;
+//    }
 }

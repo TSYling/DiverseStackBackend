@@ -83,7 +83,7 @@ public class SecurityConfig {
         // 6.0版本以后WebSecurity 简单配置方法
         return (web) -> {
             web.ignoring().requestMatchers("/api/csrf");
-            web.ignoring().requestMatchers("/webSocket/*");
+//            web.ignoring().requestMatchers("/webSocket/*");
         };
     }
     @Bean
@@ -97,8 +97,10 @@ public class SecurityConfig {
                     .requestMatchers("/emailVerifyCode/**").permitAll()
                     .requestMatchers("/csrf").permitAll()
                     .requestMatchers("/ip").permitAll()
-//                    .requestMatchers("/webSocket/*").permitAll()
+                    .requestMatchers("/error/**").permitAll()
+                    .requestMatchers("/webSocket/*").permitAll()
 //                    .requestMatchers("/**").permitAll()
+//                    .anyRequest().permitAll()
                     .anyRequest().authenticated()
                     ;
         });
@@ -129,6 +131,11 @@ public class SecurityConfig {
         });
         //异常处理
         http.exceptionHandling(handlingConfigurer -> {
+            /**
+             * 2023-09-05T16:13:04.890+08:00 ERROR 16516 --- [nio-8080-exec-5] o.a.c.c.C.[Tomcat].[localhost]
+             * : Exception Processing ErrorPage[errorCode=0, location=/error]
+             * springMVC 引发错误信息默认错误页面为/error 配置/error页面通过将不会显示access denied
+             */
             handlingConfigurer.accessDeniedHandler(new CustomAccessDeniedHandler());
             handlingConfigurer.authenticationEntryPoint(new CustomAuthenticationEntryPointHandler());
         });
@@ -159,7 +166,7 @@ public class SecurityConfig {
         //remember me 还是得用 认证过程中需要使用
         http.rememberMe(rememberMe->{
             rememberMe.rememberMeServices(rememberMeServices());
-//            rememberMe.disable();
+            rememberMe.disable();
         });
 
         //CustomFilter

@@ -43,6 +43,8 @@ import java.util.Map;
 public class WebSocketController {
     @Autowired
     WebSocketMessageBrokerStats stats;
+    @Autowired
+    private Rooms rooms;
     @MessageMapping("/sendTest")
     @SendTo("/topic/subscribeTest")
     public String sendDemo(Message message) {
@@ -88,20 +90,27 @@ public class WebSocketController {
         int roomId = 0;
         if(StringUtils.isEmpty(password)||!StringUtils.isAlphanumeric(password)){
             // 判断输入的账号密码是否为数字和字母组成 不是则忽略
-            roomId = Rooms.createRoom(user);
+            roomId = rooms.createRoom(user);
         }
         else{
-            roomId = Rooms.createRoomWithPassword(user,password);
+            roomId = rooms.createRoomWithPassword(user,password);
         }
 
         return ResponseMessageTemplate.getSuccessResponseMessage("roomId",roomId);
     }
-    @MessageMapping("/joinRoom")
+    @MessageMapping("/dissolveRoom/{roomId}")
     @SendToUser("/topic/status")
-    public ResponseMessage joinRoom(Message message,@Payload String roomId){
-        /**
-         * 用户在非禁止下才可加入房间
-         */
-        return null;
+    public ResponseMessage dissolveRoom(Message message,@DestinationVariable String roomId){
+        CustomUser user = MessageUtils.getCustomUser(message);
+        if(!StringUtils.isEmpty(roomId)&&StringUtils.isNumeric(roomId)){
+            // 判断输入的房间号id是否由数字组成
+            try{
+                rooms.dissolveRoom(user,Integer.parseInt(roomId));
+                return ResponseMessageTemplate.getSuccessResponseMessage("data",roomId+"解散成功！");
+            }catch (Exception e){
+                return ResponseMessageTemplate.getFailResponseMessage("error",e.getMessage());
+            }
+        }
+        return ResponseMessageTemplate.getFailResponseMessage("error","roomId传参错误");
     }
 }
