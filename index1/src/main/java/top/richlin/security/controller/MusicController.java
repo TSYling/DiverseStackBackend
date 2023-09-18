@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import top.richlin.security.form.SearchDetailForm;
-import top.richlin.security.service.impl.MusicServiceImpl;
+import top.richlin.security.service.MusicService;
 
 import java.io.*;
 
@@ -22,10 +22,10 @@ import java.io.*;
 @RestController
 @RequestMapping("/music")
 public class MusicController {
-    private final MusicServiceImpl musicService;
+    private final MusicService musicService;
 
     @Autowired
-    public MusicController(MusicServiceImpl musicService) {
+    public MusicController(MusicService musicService) {
         this.musicService = musicService;
     }
 

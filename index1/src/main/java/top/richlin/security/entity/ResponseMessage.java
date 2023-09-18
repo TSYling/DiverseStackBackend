@@ -19,6 +19,7 @@ import java.util.Map;
 @Data
 public class ResponseMessage {
     private int code;
+    private String type;
     private Map<String,Object> contextMap;
 
 }

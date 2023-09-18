@@ -27,10 +27,10 @@ import java.util.concurrent.TimeUnit;
 @RestController
 @RequestMapping("/user/")
 public class UserController {
-    private UserServiceImpl userService;
+    private final UserService userService;
 
     @Autowired
-    public UserController(UserServiceImpl userService) {
+    public UserController(UserService userService) {
         this.userService = userService;
     }
 

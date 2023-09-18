@@ -127,6 +127,8 @@ public class CustomChannelInterceptor implements ChannelInterceptor {
             String password = MessageUtils.getHeaderString(message, "password");
             rooms.join(user,password,room.getId());
             ResponseMessageTemplate.sendSubscribeSuccess(template,accessor,"");
+//            // 通知房间内所有人
+//            ResponseMessageTemplate.sendToAllUser(template,"/room/"+room.getId(),user.getName()+"加入房间");
             return message;
         }catch (Exception e){
             ResponseMessageTemplate.sendSubscribeFail(template,accessor,e.getMessage());

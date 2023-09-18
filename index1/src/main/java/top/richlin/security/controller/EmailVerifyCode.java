@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import top.richlin.security.service.EmailService;
 import top.richlin.security.service.impl.EmailServiceImpl;
 
 import java.io.IOException;
@@ -21,10 +22,10 @@ import java.io.IOException;
 @RestController
 @RequestMapping("/emailVerifyCode")
 public class EmailVerifyCode {
-    private EmailServiceImpl emailService;
+    private final EmailService emailService;
 
     @Autowired
-    public EmailVerifyCode(EmailServiceImpl emailService) {
+    public EmailVerifyCode(EmailService emailService) {
         this.emailService = emailService;
     }
 

@@ -39,12 +39,13 @@ public class StompDisconnectEventListener implements ApplicationListener<Session
          */
         Message<byte[]> message = event.getMessage();
         CustomUser user = MessageUtils.getCustomUser(message);
-        // 退出用户加入的房间
+        // 退出用户加入的房间和创建的房间
         stompConnectPool.leaveAllRoom(user);
+        stompConnectPool.dissolveAllRoom(user);
         user.setActiveStatus(UserActiveState.OFFLINE);
         // 更新状态
         userDao.updateById(user);
         // 记录离线
-        stompConnectPool.recordOffline(user);
+        stompConnectPool.recordOffline(user,message);
     }
 }

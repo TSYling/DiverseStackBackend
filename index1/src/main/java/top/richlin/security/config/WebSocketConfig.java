@@ -2,10 +2,8 @@ package top.richlin.security.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.*;
-import top.richlin.security.server.CustomWebSocketServerInterceptor;
+import top.richlin.security.interceptor.CustomWebSocketServerInterceptor;
 import top.richlin.security.server.WebSocketHandler;
-
-import java.util.Map;
 
 /**
  * WebSocketConfig

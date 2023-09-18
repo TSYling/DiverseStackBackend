@@ -36,6 +36,8 @@ class SecurityApplicationTests {
     void randomCodeTest(){
 //        EmailTemplate emailTemplate = new EmailTemplate();
 //        emailTemplate.loginSend("123");
+        Integer a = 1;
+        System.out.println(a.toString());
     }
     @Test
     void RoomTest(){

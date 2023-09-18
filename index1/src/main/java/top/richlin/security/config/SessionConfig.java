@@ -39,8 +39,8 @@ public class SessionConfig {
     public RedisIndexedSessionRepository repository() {
         RedisIndexedSessionRepository redisIndexedSessionRepository = new RedisIndexedSessionRepository(template());
         redisIndexedSessionRepository.setRedisKeyNamespace("richlin:session");
-        //  设置为30分钟不过期
-        redisIndexedSessionRepository.setDefaultMaxInactiveInterval(Duration.ofSeconds(1800));
+        //  设置为10小时不过期
+        redisIndexedSessionRepository.setDefaultMaxInactiveInterval(Duration.ofSeconds(36000));
         return redisIndexedSessionRepository;
     }
 }

@@ -1,4 +1,4 @@
-package top.richlin.security.server;
+package top.richlin.security.interceptor;
 
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;

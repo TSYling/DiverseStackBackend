@@ -27,8 +27,13 @@ public class Room{
      */
     private Integer roomOwnerId;
     /**
+     * 房间名
+     */
+    private String roomName;
+    /**
      * 房间大小 0代表无限制
      */
+
     private Integer roomSize = 0;
     /**
      * 房间成员信息 userId UserInfo
@@ -61,6 +66,7 @@ public class Room{
         this.id = id;
         members.put(user.getId(),new RoomUserInfo(user));
         roomOwnerId = user.getId();
+        roomName = user.getName()+"的房间("+id+")";
     }
 
     /**
@@ -69,20 +75,21 @@ public class Room{
      * @param user
      * @return 加入房间是否成功
      */
-    public void join(CustomUser user,String password) throws RuntimeException{
+    public boolean join(CustomUser user,String password) throws RuntimeException{
         Integer uid = user.getId();
         if(!isBanned(user)){
             if(this.usePassword){
                 // 需要密码 超级管理员直接进入
                 if(user.isAdmin()||this.password.equals(password)){
-                    members.putIfAbsent(uid,new RoomUserInfo(user));
-                    return;
+                    RoomUserInfo roomUserInfo = members.putIfAbsent(uid, new RoomUserInfo(user));
+                    return !ObjectUtil.isNull(roomUserInfo);
                 }
                 else{
                     throw new RuntimeException("密码错误");
                 }
             }
-            members.putIfAbsent(uid, new RoomUserInfo(user));
+            RoomUserInfo roomUserInfo = members.putIfAbsent(uid, new RoomUserInfo(user));
+            return !ObjectUtil.isNull(roomUserInfo);
         }
         else
             throw new RuntimeException("用户被禁止加入房间");
@@ -90,11 +97,10 @@ public class Room{
 
     /**
      * 离开房间
-     * @param user
      */
-    public void leave(CustomUser user){
-        Integer uid = user.getId();
-        members.remove(uid);
+    public boolean leave(Integer userId){
+        RoomUserInfo remove = members.remove(userId);
+        return !ObjectUtil.isNull(remove);
     }
 
     /**
@@ -142,6 +148,8 @@ public class Room{
             throw new RuntimeException("无法禁言");
         }
         if(getRoomOwnerId().intValue() == user.getId()||user.isAdmin()||isAdmin(user)){
+            if(isAdmin(user)&&isAdmin(selectedUser))
+                throw new RuntimeException("权限不足");
             prohibitMembers.putIfAbsent(selectedUser.getId(),new RoomUserInfo(selectedUser));
         }else {
             throw new RuntimeException("权限不足");
@@ -156,6 +164,8 @@ public class Room{
      */
     public void removeProhibitOnce(CustomUser user,CustomUser selectedUser) throws RuntimeException{
         if(getRoomOwnerId().intValue() == user.getId()||user.isAdmin()||isAdmin(user)){
+            if(isAdmin(user)&&isAdmin(selectedUser))
+                throw new RuntimeException("权限不足");
             if(ObjectUtil.isNull(prohibitMembers.remove(selectedUser.getId()))){
                 throw new RuntimeException("该用户不存在");
             }
@@ -200,6 +210,9 @@ public class Room{
             throw new RuntimeException("权限不足");
         }
     }
+    public boolean isMember(CustomUser user){
+        return !ObjectUtil.isNull(members.get(user.getId()));
+    }
     public boolean isAdmin(CustomUser user){
         return !ObjectUtil.isNull(adminMembers.get(user.getId()));
     }
@@ -211,16 +224,4 @@ public class Room{
     }
 
 }
-@Data
-class RoomUserInfo{
-    private int id;
-    private String email;
-    private String name;
-    private boolean isSuperAdmin;
-    public RoomUserInfo(CustomUser user){
-        id = user.getId();
-        email = user.getUsername();
-        name = user.getName();
-        isSuperAdmin = user.isAdmin();
-    }
-}
+
