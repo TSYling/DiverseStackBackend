@@ -12,6 +12,7 @@
             u.id,
             u.email,
             u.name,
+            u.head_url,
             u.phone,
             u.vip_level,
             u.coin,
@@ -37,7 +38,7 @@
             ON
                 u.id = leveinfo.id
         WHERE
-            u.email = #{username}
+            u.id = #{id}
         And
             u.is_delete = 0
     </select>

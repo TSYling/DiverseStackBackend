@@ -1,5 +1,6 @@
 package top.richlin.security.config;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -82,7 +83,7 @@ public class SecurityConfig {
     public WebSecurityCustomizer webSecurityCustomizer() {
         // 6.0版本以后WebSecurity 简单配置方法
         return (web) -> {
-            web.ignoring().requestMatchers("/api/csrf");
+            web.ignoring().requestMatchers("/csrf");
 //            web.ignoring().requestMatchers("/webSocket/*");
         };
     }
@@ -92,10 +93,8 @@ public class SecurityConfig {
         //配置访问权限
         http.authorizeHttpRequests(request -> {
             request
-                    .requestMatchers("/user/loginInfo").permitAll()
                     .requestMatchers("/user/register").permitAll()
-                    .requestMatchers("/emailVerifyCode/**").permitAll()
-                    .requestMatchers("/csrf").permitAll()
+                    .requestMatchers("/email/**").permitAll()
                     .requestMatchers("/ip").permitAll()
                     .requestMatchers("/error/**").permitAll()
                     .requestMatchers("/webSocket/*").permitAll()
@@ -166,7 +165,6 @@ public class SecurityConfig {
         //remember me 还是得用 认证过程中需要使用
         http.rememberMe(rememberMe->{
             rememberMe.rememberMeServices(rememberMeServices());
-            rememberMe.disable();
         });
 
         //CustomFilter
@@ -236,7 +234,7 @@ public class SecurityConfig {
         tokenRepository.setDataSource(dataSource);
 ////        tokenRepository.setCreateTableOnStartup(true); // 启动时创建表结构
         CustomPersistentTokenBaseRememberMeService customPersistentTokenBaseRememberMeService = new CustomPersistentTokenBaseRememberMeService(UUID.randomUUID().toString(), userDetailService, tokenRepository);
-        customPersistentTokenBaseRememberMeService.setAlwaysRemember(true);
+//        customPersistentTokenBaseRememberMeService.setAlwaysRemember(true);
         // 配置remember-meToken生效15天
         customPersistentTokenBaseRememberMeService.setTokenValiditySeconds(60*60*24*15);
         return customPersistentTokenBaseRememberMeService;
@@ -264,7 +262,7 @@ class CustomPersistentTokenBaseRememberMeService extends PersistentTokenBasedRem
         if(this.alwaysRemember){
             return true;
         }
-        String paramValue = request.getAttribute(parameter).toString();
+        String paramValue = request.getParameter(parameter);
         if (paramValue != null) {
             if (paramValue.equalsIgnoreCase("true") || paramValue.equalsIgnoreCase("on")
                     || paramValue.equalsIgnoreCase("yes") || paramValue.equals("1")) {

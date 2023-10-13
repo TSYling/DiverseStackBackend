@@ -39,7 +39,7 @@ public class EmailServiceImpl implements EmailService {
         if(isSuccess){
             response = new ResponseTemplate(response)
                     .successTemplate()
-                    .putInformation("msg","发送成功！")
+                    .putInformation("msg","验证码发送成功！")
                     .build();
         }
         else {
@@ -63,7 +63,7 @@ public class EmailServiceImpl implements EmailService {
         if(isSuccess){
             response = new ResponseTemplate(response)
                     .successTemplate()
-                    .putInformation("msg","发送成功！")
+                    .putInformation("msg","验证码发送成功！")
                     .build();
         }
         else {

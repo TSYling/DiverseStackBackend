@@ -53,8 +53,9 @@ public class StompController {
     /**
      *
      * @param message
-     * @return 返回指定范围内房间信息
+     * @return 返回所有房间信息
      */
+    // TODO 还没实现分页
     @MessageMapping("/roomsInfo")
     @SendToUser("/topic/status")
     public ResponseMessage roomsInfo(Message<?> message){

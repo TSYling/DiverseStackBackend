@@ -23,6 +23,8 @@ import top.richlin.security.template.EmailTemplate;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * LoginSuccessFilter
@@ -53,13 +55,12 @@ public class LoginSuccessFilter extends UsernamePasswordAuthenticationFilter {
         if (!request.getMethod().equals("POST")) {
             throw new AuthenticationServiceException("Authentication method not supported: " + request.getMethod());
         }
-        String code = request.getParameter("code");
+        String code = request.getParameter("captcha");
         if(StringUtils.hasText(code)){
             code = code.toLowerCase().trim();
             String username = obtainUsername(request);
-            username = (username != null) ? username.trim() : "";
+            CustomUser userDetails =(CustomUser) userDetailService.loadUserByUsername(username);
             checkCode(username,code);
-            CustomUser userDetails = (CustomUser) userDetailService.loadUserByUsername(username);
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
             setDetails(request, authenticationToken);
             return authenticationToken;
@@ -70,7 +71,7 @@ public class LoginSuccessFilter extends UsernamePasswordAuthenticationFilter {
     }
     private void checkCode(String email,String code){
         if(!EmailTemplate.checkVerifyCode(code,email)){
-            throw new AuthenticationServiceException("验证码已失效或错误");
+            throw new AuthenticationServiceException("验证码错误或已失效");
         }
     }
 
@@ -80,10 +81,10 @@ public class LoginSuccessFilter extends UsernamePasswordAuthenticationFilter {
         super.successfulAuthentication(request, response, chain, authResult);
         // 加上自己定义的登录成功后的动作
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        CustomUser user =  null;
+        CustomUser user;
         // 若为匿名用户 则不记录最后登录时间
         if(!username.equals("anonymousUser")){
-            user = userDao.loadByUsername(username);
+            user = userDao.loadById(username);
             user.setLastLoginTime(new Date());
         }
         else {

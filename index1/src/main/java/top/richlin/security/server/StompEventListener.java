@@ -48,7 +48,7 @@ public class StompEventListener {
         /**
          * 不能直接改写message里的user信息 会引发错误
          */
-        CustomUser newUser =userDao.loadByUsername(user.getUsername());
+        CustomUser newUser =userDao.loadById(user.getUsername());
         newUser.setActiveStatus(UserActiveState.ONLINE);
         // 更新状态
         userDao.updateById(user);

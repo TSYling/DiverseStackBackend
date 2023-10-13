@@ -7,7 +7,16 @@
         1.mapper接口的全类名和映射文件的namespace一致
         2.mapper接口中的方法和方法名要和映射文件中的sql的id保持一致
 -->
-        <select id="loadByUsername" resultType="top.richlin.security.entity.CustomUser">
-            select * from user where email = #{username} and is_delete = 0
-        </select>
+    <select id="loadByEmail" resultType="top.richlin.security.entity.CustomUser">
+        select * from user where email = #{email} and is_delete = 0
+    </select>
+    <select id="loadByPhone" resultType="top.richlin.security.entity.CustomUser">
+        select * from user where phone = #{phone} and is_delete = 0
+    </select>
+    <select id="loadById" resultType="top.richlin.security.entity.CustomUser">
+        select * from user where id = #{id} and is_delete = 0
+    </select>
+    <select id="lastInsertId" resultType="int">
+        select LAST_INSERT_ID()
+    </select>
 </mapper>

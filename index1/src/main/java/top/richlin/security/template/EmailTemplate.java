@@ -47,6 +47,9 @@ public class EmailTemplate {
     private static String getCodeFromRedis(String email){
         return (String) redisTemplate.opsForValue().get(prefix+email);
     }
+    private static boolean deleteCodeFromRedis(String email){
+        return redisTemplate.delete(email);
+    }
     public void setTarget(String email){
         this.message.setTo(email);
     }
@@ -114,6 +117,7 @@ public class EmailTemplate {
     public static boolean checkVerifyCode(String code,String email){
         String realCode = getCodeFromRedis(email);
         if(StringUtils.hasText(realCode)){
+            deleteCodeFromRedis(email);
             return code.equalsIgnoreCase(realCode);
         }
         return false;

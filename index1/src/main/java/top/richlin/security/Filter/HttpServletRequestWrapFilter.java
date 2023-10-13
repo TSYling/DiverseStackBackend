@@ -1,5 +1,6 @@
 package top.richlin.security.Filter;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSON;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ReadListener;
@@ -10,6 +11,7 @@ import jakarta.servlet.http.HttpServletRequestWrapper;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.context.ContextLoader;
 import org.springframework.web.filter.OncePerRequestFilter;
+import top.richlin.security.template.ResponseTemplate;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -37,6 +39,14 @@ public class HttpServletRequestWrapFilter extends OncePerRequestFilter {
             return;
         }
         final RequestBodyServletRequestWrapper requestWrapper = new RequestBodyServletRequestWrapper(request);
+        Object jsonParseError = requestWrapper.getAttribute("jsonParseError");
+        if(!ObjectUtil.isNull(jsonParseError)){
+            response = new ResponseTemplate(response)
+                    .failTemplate()
+                    .putInformation("error",jsonParseError)
+                    .build();
+            return;
+        }
         filterChain.doFilter(requestWrapper, response);
     }
 
@@ -76,7 +86,12 @@ public class HttpServletRequestWrapFilter extends OncePerRequestFilter {
                 return;
             }
 //            paramMap = new ObjectMapper().readValue(requestBody, Map.class);
-            JSON.parseObject(getRequestBody()).forEach((key, value) -> paramMap.put(key, new String[]{String.valueOf(value)}));
+            try{
+                JSON.parseObject(getRequestBody()).forEach((key, value) -> paramMap.put(key, new String[]{String.valueOf(value)}));
+            }catch (Exception ignored){
+                request.setAttribute("jsonParseError","参数格式不是json");
+            }
+
 
         }
 

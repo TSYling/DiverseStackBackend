@@ -23,6 +23,7 @@ public class UserInfo {
     // user
     private String email;
     private String name;
+    private String headUrl;
     private String phone;
     private int vipLevel;
     private int coin;
@@ -41,5 +42,6 @@ public class UserInfo {
     private int following;
     // user_level_info
     private int level;
+    private int exp;
 
 }

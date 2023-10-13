@@ -14,6 +14,7 @@ import top.richlin.security.service.UserService;
 import top.richlin.security.service.impl.UserServiceImpl;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -27,6 +28,9 @@ import java.util.concurrent.TimeUnit;
 @RestController
 @RequestMapping("/user/")
 public class UserController {
+    /**
+     * 下一级经验等于等级*100
+     */
     private final UserService userService;
 
     @Autowired
@@ -34,25 +38,15 @@ public class UserController {
         this.userService = userService;
     }
 
+    /**
+     * 用户注册
+     */
     @PostMapping("/register")
-    @ResponseBody
-    public void register(HttpServletResponse response, registerForm userForm) throws IOException {
-        /**
-         * 用户注册
-         */
-        CustomUser user = new CustomUser();
-        user.setEmail(userForm.getUsername());
-        user.setPassword(userForm.getPassword());
-        userService.register(response,user,userForm.getCode());
+    public void register(HttpServletResponse response,String username,String name,String password,String captcha,String invitation) throws IOException {
+        userService.register(response,username,name,password,captcha,invitation);
     }
     @PostMapping("/info")
     public void info(HttpServletResponse response) throws IOException {
         userService.info(response);
     }
-}
-@Data
-class registerForm{
-    private String username;
-    private String password;
-    private String code;
 }

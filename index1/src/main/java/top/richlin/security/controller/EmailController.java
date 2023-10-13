@@ -7,12 +7,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import top.richlin.security.service.EmailService;
-import top.richlin.security.service.impl.EmailServiceImpl;
 
 import java.io.IOException;
 
 /**
- * EmailVerifyCode
+ * EmailController
  *
  * @author wsl
  * @version 1.0
@@ -20,22 +19,22 @@ import java.io.IOException;
  * @description
  */
 @RestController
-@RequestMapping("/emailVerifyCode")
-public class EmailVerifyCode {
+@RequestMapping("/email")
+public class EmailController {
     private final EmailService emailService;
 
     @Autowired
-    public EmailVerifyCode(EmailService emailService) {
+    public EmailController(EmailService emailService) {
         this.emailService = emailService;
     }
 
     @PostMapping("/login")
-    public void loginSend(HttpServletResponse response, @RequestParam("email") String email) throws IOException {
+    public void loginSend(HttpServletResponse response, @RequestParam("username") String email) throws IOException {
         emailService.loginService(response,email);
         response.flushBuffer();
     }
     @PostMapping("/register")
-    public void register(HttpServletResponse response, @RequestParam("email") String email) throws IOException {
+    public void register(HttpServletResponse response, @RequestParam("username") String email) throws IOException {
         emailService.registerService(response,email);
         response.flushBuffer();
     }

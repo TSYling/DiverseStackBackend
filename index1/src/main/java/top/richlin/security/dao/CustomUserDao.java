@@ -15,7 +15,10 @@ import top.richlin.security.entity.UserInfo;
  */
 @Mapper
 public interface CustomUserDao extends BaseMapper<CustomUser> {
-    CustomUser loadByUsername(String username);
+    CustomUser loadByEmail(String email);
+    CustomUser loadByPhone(String phoneNumber);
+    CustomUser loadById(String id);
     UserInfo getInfoByUsername(String username);
+    int lastInsertId();
 
 }

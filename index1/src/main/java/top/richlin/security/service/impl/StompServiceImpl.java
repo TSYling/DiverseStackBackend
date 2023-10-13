@@ -42,6 +42,7 @@ public class StompServiceImpl implements StompService {
     @Override
     public ResponseMessage createRoom(Message<?> message, String password) {
         CustomUser user = MessageUtils.getCustomUser(message);
+        System.out.println(message);
         if(ObjectUtil.isNull(user)){
             return ResponseMessageTemplate.getFailResponseMessage("error","用户未登录",ResponseMessageTemplate.CREATE_ROOM);
         }

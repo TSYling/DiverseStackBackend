@@ -69,6 +69,7 @@ public class MusicServiceImpl implements MusicService {
         url += "&mid="+musicId;
 
         JsonNode responseBodyEntity = getRequestResponseBodyEntity(url);
+        System.out.println(responseBodyEntity);
         response=new ResponseTemplate(response)
                 .successTemplate()
                 .putInformation("msg",responseBodyEntity.get("msg"))
@@ -104,8 +105,8 @@ public class MusicServiceImpl implements MusicService {
         request.setHeader("Accept","application/json, text/plain, */*");
         request.setHeader("Accept-Encoding","gzip, deflate");
         request.setHeader("Referer","https://www.kuwo.cn/search/list?key=%E5%91%A8%E6%9D%B0%E4%BC%A6");
-        request.setHeader("Secret","44f165b2aacd665d3cc78018a1db619f6ab652546010027ffb1649fd62ae001701eff8aa");
-        request.setHeader("Cookie","_ga=GA1.2.1345412530.1691590027; _gid=GA1.2.564150091.1691590027; Hm_lvt_cdb524f42f0ce19b169a8071123a4797=1690328592,1690451916,1691143514,1691589934; _gat=1; Hm_lpvt_cdb524f42f0ce19b169a8071123a4797=1691590098; _ga_ETPBRPM9ML=GS1.2.1691590027.1.1.1691590097.52.0.0; Hm_Iuvt_cdb524f42f0cer9b268e4v7y734w5esq24=dHzyS6B7G7RHHBn4pWnKWws38SFnHXhx");
+        request.setHeader("Secret","b0a4a30e02fdbaa98bc912aea0b67763acd7ee9c055682f9a945ac3afe24020604e1194f");
+        request.setHeader("Cookie","_ga=GA1.2.1345412530.1691590027; _gid=GA1.2.614407474.1697028262; Hm_lvt_cdb524f42f0ce19b169a8071123a4797=1697028262; _gat=1; Hm_Iuvt_cdb524f42f0cer9b268e4v7y735ewrq2324=3pPJGQmDmEN5riQJrsrNBKHKiMy7Zmai; Hm_lpvt_cdb524f42f0ce19b169a8071123a4797=1697028466; _ga_ETPBRPM9ML=GS1.2.1697028262.2.1.1697028466.53.0.0");
         request.setHeader("sec-ch-ua-mobile","?0");
         request.setHeader("Sec-Fetch-Site","same-origin");
 

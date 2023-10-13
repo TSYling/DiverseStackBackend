@@ -16,7 +16,7 @@ import java.io.IOException;
  */
 @Service
 public interface UserService {
-    public void register(HttpServletResponse response, CustomUser user,String code) throws IOException;
+    public void register(HttpServletResponse response,String username,String name,String password,String captcha,String invitation) throws IOException;
 
     void info(HttpServletResponse response) throws IOException;
 }

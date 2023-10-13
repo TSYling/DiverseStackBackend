@@ -44,6 +44,10 @@ public class CustomUser implements UserDetails {
      */
     private String name;
     /**
+     * 用户头像地址
+     */
+    private String headUrl;
+    /**
      * 用户电话
      */
 
@@ -96,7 +100,7 @@ public class CustomUser implements UserDetails {
 
     @Override
     public String getUsername() {
-        return email;
+        return id.toString();
     }
 
     @Override
